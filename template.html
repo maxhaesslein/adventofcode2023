@@ -1,0 +1,109 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+<title>Day ?? - Advent of Code 2023</title>
+<script type="text/javascript">
+
+function prepareInput( input ) {
+	return input;
+}
+
+function answer1( input ) {
+	return "?";
+}
+
+function answer2( input ) {
+	return "?";
+}
+
+
+function testinput1(){
+	return '(test)';
+}
+
+
+function getInput( textArea ) {
+
+	var input = textArea.value;
+
+	input = input.trim();
+
+	if( ! input ) console.warn("please provide an input");
+
+	return input;
+}
+
+
+function startAnswer( textArea ) {
+
+	if( ! textArea ) textArea = document.getElementById('input');
+
+	var input = prepareInput(getInput(textArea));
+	output.innerHTML = "Answer 1: "+answer1(input);
+	input = prepareInput(getInput(textArea));
+	output.innerHTML += "\nAnswer 2: "+answer2(input);
+
+}
+
+
+window.addEventListener('load',function(){
+
+	var testinputButtons = document.querySelectorAll('.testinput-button');
+	for( var testinputButton of testinputButtons ) {
+		testinputButton.addEventListener( 'click', function(){
+			var testinputButton = this,
+				testinput = testinputButton.parentNode,
+				testinputContent = testinput.querySelector('.testinput-content');
+			
+			startAnswer(testinputContent);
+		});
+	}
+
+	var output = document.getElementById('output');
+	document.getElementById('start').addEventListener('click', function(){
+		startAnswer();
+	});
+});
+
+
+</script>
+<style>
+textarea {
+	display: block;
+	border: 1px solid #aaa;
+}
+pre {
+	background: #eee;
+	min-height: 3em;
+}
+hr {
+	border: 0;
+	height: 1px;
+	background: #ddd;
+}
+.testinput {
+	display: inline-block;
+}
+</style>
+</head>
+<body>
+
+<pre id="output"></pre>
+
+<hr>
+
+<div class="testinput">
+<textarea readonly class="testinput-content"></textarea>
+<button class="testinput-button">Test-Input</button>
+</div>
+
+<div class="testinput">
+<textarea readonly class="testinput-content"></textarea>
+<button class="testinput-button">Test-Input</button>
+</div>
+
+<hr>
+
+<textarea id="input" style="width: 500px; height: 500px;"></textarea>
+<button id="start">start</button>
+
+
+</body></html>
