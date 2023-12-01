@@ -3,6 +3,9 @@
 <script type="text/javascript">
 
 function prepareInput( input ) {
+
+	input = input.split("\n");
+
 	return input;
 }
 
@@ -14,10 +17,6 @@ function answer2( input ) {
 	return "?";
 }
 
-
-function testinput1(){
-	return '(test)';
-}
 
 
 function getInput( textArea ) {
@@ -32,14 +31,29 @@ function getInput( textArea ) {
 }
 
 
-function startAnswer( textArea ) {
+function startAnswer( textArea, part, expectedAnswer ) {
 
 	if( ! textArea ) textArea = document.getElementById('input');
 
-	var input = prepareInput(getInput(textArea));
-	output.innerHTML = "Answer 1: "+answer1(input);
-	input = prepareInput(getInput(textArea));
-	output.innerHTML += "\nAnswer 2: "+answer2(input);
+	if( part != 1 && part != 2 ) part = 0;
+
+	var input;
+
+	if( part === 1 || part === 0 ) {
+		input = getInput(textArea);
+		input = prepareInput(input);
+		document.getElementById('output-1').innerHTML = "<strong>Answer 1:</strong>\n";
+		document.getElementById('output-1').innerHTML += answer1(input);
+		if( expectedAnswer ) document.getElementById('output-1').innerHTML += "\n<strong>"+expectedAnswer+'</strong> (expected)';
+	}
+
+	if( part === 2 || part === 0 ) {
+		input = getInput(textArea);
+		input = prepareInput(input);
+		document.getElementById('output-2').innerHTML = "<strong>Answer 2:</strong>\n";
+		document.getElementById('output-2').innerHTML += answer2(input);
+		if( expectedAnswer ) document.getElementById('output-2').innerHTML += "\n<strong>"+expectedAnswer+'</strong> (expected)';
+	}
 
 }
 
@@ -52,12 +66,17 @@ window.addEventListener('load',function(){
 			var testinputButton = this,
 				testinput = testinputButton.parentNode,
 				testinputContent = testinput.querySelector('.testinput-content');
-			
-			startAnswer(testinputContent);
+
+			var part = 0;
+			if( testinputButton.dataset.part ) part = parseInt(testinputButton.dataset.part, 10);
+
+			var answer = '';
+			if( testinputContent.dataset.answer ) answer = testinputContent.dataset.answer;
+
+			startAnswer(testinputContent, part, answer);
 		});
 	}
 
-	var output = document.getElementById('output');
 	document.getElementById('start').addEventListener('click', function(){
 		startAnswer();
 	});
@@ -72,7 +91,8 @@ textarea {
 }
 pre {
 	background: #eee;
-	min-height: 3em;
+	width: calc(50vw - 10px);
+	display: inline-block;
 }
 hr {
 	border: 0;
@@ -86,20 +106,20 @@ hr {
 </head>
 <body>
 
-<pre id="output"></pre>
+<pre id="output-1"></pre>
+<pre id="output-2"></pre>
 
 <hr>
 
 <div class="testinput">
-<textarea readonly class="testinput-content"></textarea>
-<button class="testinput-button">Test-Input</button>
+<textarea readonly class="testinput-content" data-answer="?"></textarea>
+<button class="testinput-button" data-part="1">Test-Input Part 1</button>
 </div>
 
 <div class="testinput">
-<textarea readonly class="testinput-content"></textarea>
-<button class="testinput-button">Test-Input</button>
+<textarea readonly class="testinput-content" data-answer="?"></textarea>
+<button class="testinput-button" data-part="2">Test-Input Part 2</button>
 </div>
-
 <hr>
 
 <textarea id="input" style="width: 500px; height: 500px;"></textarea>
