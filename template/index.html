@@ -1,23 +1,50 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"/>
+
 <title>Day ?? - Advent of Code 2023</title>
+
+</head><body>
+
+<pre id="output-1"></pre><pre id="output-2"></pre><hr>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="?"></textarea>
+<button class="testinput-button" data-part="1">Test-Input Part 1</button>
+</div>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="?"></textarea>
+<button class="testinput-button" data-part="2">Test-Input Part 2</button>
+</div>
+
+<hr>
+<textarea id="input" style="width: 500px; height: 500px;"></textarea>
+<button id="start">start</button>
+
+
+<style>
+textarea {
+	display: block;
+	border: 1px solid #aaa;
+}
+pre {
+	background: #eee;
+	width: calc(50vw - 10px);
+	display: inline-block;
+}
+hr {
+	border: 0;
+	height: 1px;
+	background: #ddd;
+}
+.testinput {
+	display: inline-block;
+}
+</style>
+
+
+<script async src="answer.js"></script>
+
 <script type="text/javascript">
-
-function prepareInput( input ) {
-
-	input = input.split("\n");
-
-	return input;
-}
-
-function answer1( input ) {
-	return "?";
-}
-
-function answer2( input ) {
-	return "?";
-}
-
-
 
 function getInput( textArea ) {
 
@@ -82,48 +109,6 @@ window.addEventListener('load',function(){
 	});
 });
 
-
 </script>
-<style>
-textarea {
-	display: block;
-	border: 1px solid #aaa;
-}
-pre {
-	background: #eee;
-	width: calc(50vw - 10px);
-	display: inline-block;
-}
-hr {
-	border: 0;
-	height: 1px;
-	background: #ddd;
-}
-.testinput {
-	display: inline-block;
-}
-</style>
-</head>
-<body>
-
-<pre id="output-1"></pre>
-<pre id="output-2"></pre>
-
-<hr>
-
-<div class="testinput">
-<textarea readonly class="testinput-content" data-answer="?"></textarea>
-<button class="testinput-button" data-part="1">Test-Input Part 1</button>
-</div>
-
-<div class="testinput">
-<textarea readonly class="testinput-content" data-answer="?"></textarea>
-<button class="testinput-button" data-part="2">Test-Input Part 2</button>
-</div>
-<hr>
-
-<textarea id="input" style="width: 500px; height: 500px;"></textarea>
-<button id="start">start</button>
-
 
 </body></html>
