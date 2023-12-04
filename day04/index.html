@@ -1,0 +1,124 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+
+<title>Day 04 - Advent of Code 2023</title>
+
+</head><body>
+
+<pre id="output-1"></pre><pre id="output-2"></pre><hr>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="13">Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
+Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
+Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
+Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
+Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
+Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11</textarea>
+<button class="testinput-button" data-part="1">Test-Input Part 1</button>
+</div>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="30">Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53
+Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19
+Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1
+Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83
+Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
+Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11</textarea>
+<button class="testinput-button" data-part="2">Test-Input Part 2</button>
+</div>
+
+<hr>
+<textarea id="input" style="width: 500px; height: 500px;"></textarea>
+<button id="start">start</button>
+
+
+<style>
+textarea {
+	display: block;
+	border: 1px solid #aaa;
+}
+pre {
+	background: #eee;
+	width: calc(50vw - 10px);
+	display: inline-block;
+}
+hr {
+	border: 0;
+	height: 1px;
+	background: #ddd;
+}
+.testinput {
+	display: inline-block;
+}
+</style>
+
+
+<script async src="answer.js"></script>
+
+<script type="text/javascript">
+
+function getInput( textArea ) {
+
+	var input = textArea.value;
+
+	input = input.trim();
+
+	if( ! input ) console.warn("please provide an input");
+
+	return input;
+}
+
+
+function startAnswer( textArea, part, expectedAnswer ) {
+
+	if( ! textArea ) textArea = document.getElementById('input');
+
+	if( part != 1 && part != 2 ) part = 0;
+
+	var input;
+
+	if( part === 1 || part === 0 ) {
+		input = getInput(textArea);
+		input = prepareInput(input);
+		document.getElementById('output-1').innerHTML = "<strong>Answer 1:</strong>\n";
+		document.getElementById('output-1').innerHTML += answer1(input);
+		if( expectedAnswer ) document.getElementById('output-1').innerHTML += "\n<strong>"+expectedAnswer+'</strong> (expected)';
+	}
+
+	if( part === 2 || part === 0 ) {
+		input = getInput(textArea);
+		input = prepareInput(input);
+		document.getElementById('output-2').innerHTML = "<strong>Answer 2:</strong>\n";
+		document.getElementById('output-2').innerHTML += answer2(input);
+		if( expectedAnswer ) document.getElementById('output-2').innerHTML += "\n<strong>"+expectedAnswer+'</strong> (expected)';
+	}
+
+}
+
+
+window.addEventListener('load',function(){
+
+	var testinputButtons = document.querySelectorAll('.testinput-button');
+	for( var testinputButton of testinputButtons ) {
+		testinputButton.addEventListener( 'click', function(){
+			var testinputButton = this,
+				testinput = testinputButton.parentNode,
+				testinputContent = testinput.querySelector('.testinput-content');
+
+			var part = 0;
+			if( testinputButton.dataset.part ) part = parseInt(testinputButton.dataset.part, 10);
+
+			var answer = '';
+			if( testinputContent.dataset.answer ) answer = testinputContent.dataset.answer;
+
+			startAnswer(testinputContent, part, answer);
+		});
+	}
+
+	document.getElementById('start').addEventListener('click', function(){
+		startAnswer();
+	});
+});
+
+</script>
+
+</body></html>
