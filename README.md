@@ -8,3 +8,4 @@ my solutions in JavaScript for [Advent of Code](https://adventofcode.com/) 2023
 - Day 05: ~ 111 min (p1: ~ 25 min, p2: ~ 86 min)
 - Day 06: ~  17 min (p1: ~ 15 min, p2: ~  2 min)
 - Day 07: ~  60 min (p1: ~ 30 min, p2: ~ 30 min)
+- Day 08: ~  43 min (p1: ~  8 min, p2: ~ 35 min)
