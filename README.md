@@ -1,12 +1,13 @@
 my solutions in JavaScript for [Advent of Code](https://adventofcode.com/) 2023
 
-
-- Day 01: ~  57 min
-- Day 02: ~  18 min
-- Day 03: ~  67 min (p1: ~ 48 min, p2: ~ 19 min)
-- Day 04: ~  25 min (p1: ~ 12 min, p2: ~ 13 min)
-- Day 05: ~ 111 min (p1: ~ 25 min, p2: ~ 86 min)
-- Day 06: ~  17 min (p1: ~ 15 min, p2: ~  2 min)
-- Day 07: ~  60 min (p1: ~ 30 min, p2: ~ 30 min)
-- Day 08: ~  43 min (p1: ~  8 min, p2: ~ 35 min)
-- Day 09: ~  23 min (p1: ~ 21 min, p2: ~  2 min)
+| Day | Total | Part 1 | Part 2 |
+| :---: | ---: | ---: | ---: |
+| 01 | ~ 57 min | | |
+| 02 | ~ 18 min | | |
+| 03 | ~ 67 min | ~ 48 min | ~ 19 min |
+| 04 | ~ 25 min | ~ 12 min | ~ 13 min |
+| 05 | ~ 111 min | ~ 25 min | ~ 86 min |
+| 06 | ~ 17 min | ~ 15 min | ~ 2 min |
+| 07 | ~ 60 min | ~ 30 min | ~ 30 min |
+| 08 | ~ 43 min | ~ 8 min | ~ 35 min |
+| 09 | ~ 23 min | ~ 21 min | ~ 2 min |
