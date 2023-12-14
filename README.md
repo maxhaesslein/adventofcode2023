@@ -15,3 +15,4 @@ my solutions in JavaScript for [Advent of Code](https://adventofcode.com/) 2023
 | 11 | ~ 46 min | ~ 37 min | ~ 9 min |
 | 12 | (not finished) | ~ 37 min | |
 | 13 | ~ 62 min | ~ 44 min | ~ 18 min |
+| 14 | ~ 52 min | ~ 7 min | ~ 45 min |
