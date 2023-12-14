@@ -16,72 +16,84 @@ function prepareInput( input ) {
 }
 
 
-function numberOfArrangements( record, position, safetyInformation, group, length, sum ) {
+var cache = {};
 
-	if( position >= record.length ) {
-		if( group < safetyInformation.length || length > 0 ) {
-			return 0;
-		}
+function numberOfArrangements( record, safetyInformation, sum ) {
 
-		return 1;
+	var cacheHash = 'c_'+record+'_'+safetyInformation.join(',');
+	if( cache[cacheHash] ) {
+		return cache[cacheHash];
 	}
 
-	var symbol = record[position];
+	if( record.length < 1 ) {
+		if( safetyInformation.length < 1 ) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 
-	position++;
+	var symbol = record[0];
 
 	if( symbol == '.' ) {
 
 		// skip ahead, if there are more dots
-		while( position < record.length ) {
-			if( record[position] != '.' ) break;
-			position++;
+		for( var i = 0; i < record.length; i++ ) {
+			if( record[i] != '.' ) break;
 		}
-		return numberOfArrangements( record, position, safetyInformation, group, length, 0 );
+		record = record.substring(i);
+		return numberOfArrangements( record, safetyInformation, sum );
 
 	} else if( symbol == '#' ) {
 
-		length++;
+		if( safetyInformation.length < 1 ) return 0;
 
-		if( length == safetyInformation[group] ) {
+		var expectedLength = safetyInformation[0];
 
-			// check next symbol:
-			if( position >= record.length ) {
-				// end of string
+		for( var i = 0; i < expectedLength; i++ ) {
 
-				if( length != safetyInformation[group] ) {
-					return 0;
-				}
-
-			} else if( record[position] == '#' ) {
+			if( ! record[i] ) {
 				return 0;
-			} else if( record[position] == '?' ) {
-				record = record.slice(0,position)+'.'+record.slice(position+1);
+			} else if( record[i] == '.' ) {
+				return 0;
+			} else if( record[i] == '?' ) {
+				record = record.slice(0,i)+'#'+record.slice(i+1);
 			}
 
-			group++;
-			length = 0;
+		}
 
-		} else if( group > safetyInformation.length || length > safetyInformation[group] ) {
-			return 0;
-		} else if( record[position] == '.' ) {
+		record = record.substring(i);
+		safetyInformation.shift(); // remove the group we just traversed
+
+		if( record.length > 0 ) {
+
+			if( record[0] == '#' ) {
+				return 0;
+			} else if( record[0] == '?' ) {
+				record = record.slice(1); // remove the first element, because it _must_ be a dot, and so we can ignore it
+			}
+
+		}
+
+		// check, if remaining groups fit
+		var minLength = -1;
+		for( var i = 0; i < safetyInformation.length; i++ ) {
+			minLength += safetyInformation[i]+1;
+		}
+		if( minLength > record.length ) {
 			return 0;
 		}
 
-		return numberOfArrangements( record, position, safetyInformation, group, length, 0 );
+		return numberOfArrangements( record, safetyInformation, sum );
 
 	} else if( symbol == '?' ) {
 
-		if( length == 0 || safetyInformation[group] == length ) { // check, if current group is already closed (or no group is open), otherwise we don't need to check for .
-			record = record.slice(0,position-1)+'.'+record.slice(position);
-			sum += numberOfArrangements( record, position-1, safetyInformation, group, length, 0 );
-		}
-
-		record = record.slice(0,position-1)+'#'+record.slice(position);
-		sum += numberOfArrangements( record, position-1, safetyInformation, group, length, 0 );
+		sum += numberOfArrangements( '#'+record.slice(1), Array.from(safetyInformation), 0 );
+		sum += numberOfArrangements( record.slice(1), Array.from(safetyInformation), 0 ); // first element is a dot, so we can just remove and ignore it
 
 	}
 
+	cache[cacheHash] = sum;
 	return sum;
 }
 
@@ -90,7 +102,7 @@ function answer1( springs ) {
 	var sum = 0;
 
 	for( var spring of springs ) {
-		sum += numberOfArrangements( spring['conditionRecord'], 0, spring['safetyInformation'], 0, 0, 0 );
+		sum += numberOfArrangements( spring['conditionRecord'], spring['safetyInformation'], 0 );
 	}
 
 	return sum;
