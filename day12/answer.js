@@ -1,3 +1,5 @@
+var cache;
+
 
 function prepareInput( input ) {
 
@@ -16,19 +18,19 @@ function prepareInput( input ) {
 }
 
 
-var cache = {};
-
 function numberOfArrangements( record, safetyInformation, sum ) {
 
-	var cacheHash = 'c_'+record+'_'+safetyInformation.join(',');
+	var cacheHash = record+safetyInformation.join(',');
 	if( cache[cacheHash] ) {
 		return cache[cacheHash];
 	}
 
 	if( record.length < 1 ) {
 		if( safetyInformation.length < 1 ) {
+			cache[cacheHash] = 1;
 			return 1;
 		} else {
+			cache[cacheHash] = 0;
 			return 0;
 		}
 	}
@@ -42,19 +44,24 @@ function numberOfArrangements( record, safetyInformation, sum ) {
 			if( record[i] != '.' ) break;
 		}
 		record = record.substring(i);
-		return numberOfArrangements( record, safetyInformation, sum );
+		sum = numberOfArrangements( record, safetyInformation, sum );
 
 	} else if( symbol == '#' ) {
 
-		if( safetyInformation.length < 1 ) return 0;
+		if( safetyInformation.length < 1 ) {
+			cache[cacheHash] = 0;
+			return 0;
+		}
 
 		var expectedLength = safetyInformation[0];
 
 		for( var i = 0; i < expectedLength; i++ ) {
 
 			if( ! record[i] ) {
+				cache[cacheHash] = 0;
 				return 0;
 			} else if( record[i] == '.' ) {
+				cache[cacheHash] = 0;
 				return 0;
 			} else if( record[i] == '?' ) {
 				record = record.slice(0,i)+'#'+record.slice(i+1);
@@ -68,6 +75,7 @@ function numberOfArrangements( record, safetyInformation, sum ) {
 		if( record.length > 0 ) {
 
 			if( record[0] == '#' ) {
+				cache[cacheHash] = 0;
 				return 0;
 			} else if( record[0] == '?' ) {
 				record = record.slice(1); // remove the first element, because it _must_ be a dot, and so we can ignore it
@@ -81,10 +89,11 @@ function numberOfArrangements( record, safetyInformation, sum ) {
 			minLength += safetyInformation[i]+1;
 		}
 		if( minLength > record.length ) {
+			cache[cacheHash] = 0;
 			return 0;
 		}
 
-		return numberOfArrangements( record, safetyInformation, sum );
+		sum = numberOfArrangements( record, safetyInformation, sum );
 
 	} else if( symbol == '?' ) {
 
@@ -102,6 +111,7 @@ function answer1( springs ) {
 	var sum = 0;
 
 	for( var spring of springs ) {
+		cache = {};
 		sum += numberOfArrangements( spring['conditionRecord'], spring['safetyInformation'], 0 );
 	}
 
@@ -111,6 +121,9 @@ function answer1( springs ) {
 function answer2( springs ) {
 
 	for( var i = 0; i < springs.length; i++ ) {
+
+		cache = {};
+
 		var spring = springs[i];
 
 		springs[i] = {
