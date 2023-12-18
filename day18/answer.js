@@ -3,6 +3,7 @@ function prepareInput( input ) {
 
 	input = input.split("\n").map(function(l){
 		l = l.split(' ');
+		l[1] = parseInt(l[1], 10);
 		l[2] = l[2].replace('(','').replace(')','');
 		return l;
 	});
@@ -12,181 +13,79 @@ function prepareInput( input ) {
 
 function answer1( input ) {
 
-	var map = build(input);
+	// after browsing the subreddit, I found out about the shoelace formula / Gauss's area formula
+	// For a polygon with n vertices (x1, y1), (x2, y2), ..., (xn, yn), the formula is:
+	// Area = 1/2 * Σ(xi*yi+1 - xi+1*yi) 
 
-	map = fill(map);
+	var area = 0;
 
-	draw(map);
+	var x1 = 0,
+		y1 = 0;
 
-	return holeCount(map);
+	for( var line of input ) {
+
+		var direction = line[0],
+			distance = line[1];
+
+		var x2 = x1,
+			y2 = y1;
+
+		if( direction == 'U' ) {
+			y2 -= distance;
+		} else if( direction == 'D' ) {
+			y2 += distance;
+		} else if( direction == 'L' ) {
+			x2 -= distance;
+		} else if ( direction == 'R' ) {
+			x2 += distance;
+		}
+
+		area += x1*y2 - x2*y1;
+
+		x1 = x2;
+		y1 = y2;
+
+		area += distance; // add the area for the actual line
+
+	}
+
+	area /= 2;
+	area = Math.abs(area);
+	area += 1; // the area for the starting point
+
+	return area;
 }
 
 function answer2( input ) {
-	return "?";
+
+	input = decodeInput(input);
+
+	return answer1(input);
 }
 
-function build( input ) {
+function decodeInput( input ) {
 
-	var map = [],
-		x = 0,
-		y = 0;
+	var decodedInput = [];
 
-	for( var line of input ) {
-		var direction = line[0],
-			distance = parseInt(line[1],10),
-			color = line[2];
+	for( var el of input ) {
+		var color = el[2],
+			distance = parseInt(color.slice(1,6), 16),
+			direction = color.slice(6);
 
-		if( ! map[y] ) map[y] = [];
-
-		if( direction == 'U' || direction == 'D' ) {
-
-			var startY, endY;
-			if( direction == 'D' ) {
-				startY = y+1;
-				endY = y+1+distance;
-				y += distance;
-			} else {
-				startY = y-distance;
-				endY = y;
-				y -= distance;
-			}
-
-			for( var yi = startY; yi < endY; yi++ ) {
-				if( ! map[yi] ) map[yi] = [];
-				map[yi][x] = color;
-			}
-
-		} else if( direction == 'L' || direction == 'R' ) {
-
-			var startX, endX;
-			if( direction == 'R' ) {
-				startX = x+1;
-				endX = x+1+distance;
-				x += distance;
-			} else {
-				startX = x-distance;
-				endX = x;
-				x -= distance;
-			}
-
-			for( var xi = startX; xi < endX; xi++ ) {
-				map[y][xi] = color;
-			}
-			
+		if( direction == 0 ) {
+			direction = 'R';
+		} else if( direction == 1 ) {
+			direction = 'D';
+		} else if( direction == 2 ) {
+			direction = 'L';
+		} else if( direction == 3 ) {
+			direction = 'U';
+		} else {
+			console.warn('unknown direction', direction)
 		}
 
+		decodedInput.push([direction, distance, color]);
 	}
 
-	map = normalize(map);
-
-	return map;
-}
-
-function normalize( map ) {
-
-	// our map can have negative indexes, we normalize them here to start at 0
-
-	var newMap = [];
-
-	// JavaScript is weird, but this works :)
-	var keys = Object.keys(map).sort(function(a,b){
-		return a-b;
-	});
-	for( var key of keys ) {
-		newMap.push(map[key]);
-	}
-
-	// find the lowest x value
-	var lowestXKey = 0;
-	for( var y = 0; y < newMap.length; y++ ){
-		var xKeys = Object.keys(newMap[y]).sort(function(a,b){return a-b;});
-		var currentLowestXKey = parseInt(xKeys[0],10);
-		if( currentLowestXKey < lowestXKey ) lowestXKey = currentLowestXKey;
-	}
-
-	// move all lines to the right
-	for( var y = 0; y < newMap.length; y++ ) {
-		var newLine = [];
-		for( var x = lowestXKey; x < newMap[y].length; x++ ) {
-			newLine.push(newMap[y][x]);
-		}
-		newMap[y] = newLine;
-	}
-
-	return newMap;
-}
-
-function fill(map) {
-
-	for( var y = 0; y < map.length; y++ ) {
-		for( var x = 0; x < map[y].length; x++ ) {
-			var el = map[y][x];
-			if( isInside( map, [x,y] ) ) {
-				map[y][x] = '#000'; // black for now
-			}
-		}
-	}
-
-	return map;
-}
-
-function isInside( map, point ) {
-
-	if( map[point[1]][point[0]] ) return false;
-
-	var crossCount = 0,
-		y = point[1];
-
-	for( var x = point[0]; x <= map[y].length; x++ ) {
-
-		var tile = map[y][x];
-
-		if( ! tile ) {
-			continue;
-		}
-
-		if( map[y+1] && map[y+1][x] ) {
-			crossCount++;
-		}
-		
-	}
-
-	var inside = false;
-	if( crossCount%2 == 1 ) inside = true;
-
-	return inside;
-}
-
-function holeCount( map ) {
-	map = map.map(function(l){
-		return l.map(function(e){
-			if( e ) return '#';
-			else return '';
-		}).join('');
-	}).join('');
-
-	return map.length;
-}
-
-function draw( map ) {
-
-	var output = document.getElementById('testoutput');
-
-	var string = '';
-	for( var y = 0; y < map.length; y++ ) {
-		for( var x = 0; x < map[y].length; x++ ) {
-			var color = map[y][x];
-			if( ! color ) {
-				string += ' ';
-				continue;
-			}
-
-			string += '<span style="color: '+color+';">■</span>';
-
-		}
-		string += '<br>';
-	}
-
-	output.innerHTML = string;
-
+	return decodedInput;
 }
