@@ -1,0 +1,179 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"/>
+
+<title>Day 18 - Advent of Code 2023</title>
+
+</head><body>
+
+<pre id="output-1"></pre><pre id="output-2"></pre><hr>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="62">R 6 (#70c710)
+D 5 (#0dc571)
+L 2 (#5713f0)
+D 2 (#d2c081)
+R 2 (#59c680)
+D 2 (#411b91)
+L 5 (#8ceee2)
+U 2 (#caa173)
+L 1 (#1b58a2)
+U 2 (#caa171)
+R 2 (#7807d2)
+U 3 (#a77fa3)
+L 2 (#015232)
+U 2 (#7a21e3)</textarea>
+<button class="testinput-button" data-part="1">Test-Input Part 1</button>
+</div>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="84">R 3 (#70c710)
+U 4 (#ff0000)
+R 3 (#ff0000)
+D 4 (#ff0000)
+D 5 (#0dc571)
+L 2 (#5713f0)
+D 2 (#d2c081)
+R 2 (#59c680)
+D 2 (#411b91)
+L 5 (#8ceee2)
+U 2 (#caa173)
+L 1 (#1b58a2)
+L 2 (#ff0000)
+U 2 (#ff0000)
+R 2 (#ff0000)
+R 2 (#7807d2)
+U 3 (#a77fa3)
+L 2 (#015232)
+U 2 (#7a21e3)</textarea>
+<button class="testinput-button" data-part="1">Additional Test-Input Part 1</button>
+</div>
+
+<div class="testinput">
+<textarea readonly class="testinput-content" data-answer="?">R 6 (#70c710)
+D 5 (#0dc571)
+L 2 (#5713f0)
+D 2 (#d2c081)
+R 2 (#59c680)
+D 2 (#411b91)
+L 5 (#8ceee2)
+U 2 (#caa173)
+L 1 (#1b58a2)
+U 2 (#caa171)
+R 2 (#7807d2)
+U 3 (#a77fa3)
+L 2 (#015232)
+U 2 (#7a21e3)</textarea>
+<button class="testinput-button" data-part="2">Test-Input Part 2</button>
+</div>
+
+<pre id="testoutput" class="testoutput"></pre>
+
+<hr>
+<textarea id="input" style="width: 500px; height: 200px;"></textarea>
+<button id="start">start</button>
+
+
+<style>
+textarea {
+	display: block;
+	border: 1px solid #aaa;
+}
+pre {
+	background: #eee;
+	width: calc(50vw - 10px);
+	display: inline-block;
+}
+hr {
+	border: 0;
+	height: 1px;
+	background: #ddd;
+}
+.testinput {
+	display: inline-block;
+}
+.testoutput {
+	display: block;
+	width: 100%;
+	font-size: 5px;
+	line-height: 0.6;
+}
+</style>
+
+
+<script async src="answer.js"></script>
+
+<script type="text/javascript">
+
+function getInput( textArea ) {
+
+	var input = textArea.value;
+
+	input = input.trim();
+
+	if( ! input ) console.warn("please provide an input");
+
+	return input;
+}
+
+
+function startAnswer( textArea, part, expectedAnswer ) {
+
+	if( ! textArea ) textArea = document.getElementById('input');
+
+	if( part != 1 && part != 2 ) part = 0;
+
+	var input;
+
+	if( part === 1 || part === 0 ) {
+
+		var startTime = performance.now();
+
+		input = getInput(textArea);
+		input = prepareInput(input);
+		document.getElementById('output-1').innerHTML = "<strong>Answer 1:</strong>\n";
+		document.getElementById('output-1').innerHTML += answer1(input);
+		document.getElementById('output-1').innerHTML += ' <span style="opacity: 0.5">('+(performance.now()-startTime)+'ms)</span>';
+		if( expectedAnswer ) document.getElementById('output-1').innerHTML += "\n<strong>"+expectedAnswer+'</strong> (expected)';
+	}
+
+	if( part === 2 || part === 0 ) {
+		
+		var startTime = performance.now();
+
+		input = getInput(textArea);
+		input = prepareInput(input);
+		document.getElementById('output-2').innerHTML = "<strong>Answer 2:</strong>\n";
+		document.getElementById('output-2').innerHTML += answer2(input);
+		document.getElementById('output-2').innerHTML += ' <span style="opacity: 0.5">('+(performance.now()-startTime)+'ms)</span>';
+		if( expectedAnswer ) document.getElementById('output-2').innerHTML += "\n<strong>"+expectedAnswer+'</strong> (expected)';
+	}
+
+}
+
+
+window.addEventListener('load',function(){
+
+	var testinputButtons = document.querySelectorAll('.testinput-button');
+	for( var testinputButton of testinputButtons ) {
+		testinputButton.addEventListener( 'click', function(){
+			var testinputButton = this,
+				testinput = testinputButton.parentNode,
+				testinputContent = testinput.querySelector('.testinput-content');
+
+			var part = 0;
+			if( testinputButton.dataset.part ) part = parseInt(testinputButton.dataset.part, 10);
+
+			var answer = '';
+			if( testinputContent.dataset.answer ) answer = testinputContent.dataset.answer;
+
+			startAnswer(testinputContent, part, answer);
+		});
+	}
+
+	document.getElementById('start').addEventListener('click', function(){
+		startAnswer();
+	});
+});
+
+</script>
+
+</body></html>
